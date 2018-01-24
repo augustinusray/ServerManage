@@ -1,11 +1,11 @@
 ﻿using Domain;
-using Domain.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EntityFrameWorkCore
 {
@@ -14,7 +14,7 @@ namespace EntityFrameWorkCore
     /// </summary>
     /// <typeparam name="TEntity">实体类型</typeparam>
     /// <typeparam name="TPrimaryKey">主键类型</typeparam>
-    public abstract class Repository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey> where TEntity : Entity<TPrimaryKey>
+    public abstract class Repository<TEntity, TPrimaryKey> : IRepository<TEntity,TPrimaryKey> where TEntity:class,new()
     {
         //定义数据访问上下文对象
         protected readonly ServerManageDbContext _dbContext;
@@ -32,9 +32,9 @@ namespace EntityFrameWorkCore
         /// 获取实体集合
         /// </summary>
         /// <returns></returns>
-        public List<TEntity> GetAllList()
+        public async Task<List<TEntity>> GetAllList()
         {
-            return _dbContext.Set<TEntity>().ToList();
+            return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
         /// <summary>
@@ -42,19 +42,9 @@ namespace EntityFrameWorkCore
         /// </summary>
         /// <param name="predicate">lambda表达式条件</param>
         /// <returns></returns>
-        public List<TEntity> GetAllList(Expression<Func<TEntity, bool>> predicate)
+        public async Task<List<TEntity>> GetAllList(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbContext.Set<TEntity>().Where(predicate).ToList();
-        }
-
-        /// <summary>
-        /// 根据主键获取实体
-        /// </summary>
-        /// <param name="id">实体主键</param>
-        /// <returns></returns>
-        public TEntity Get(TPrimaryKey id)
-        {
-            return _dbContext.Set<TEntity>().FirstOrDefault(CreateEqualityExpressionForId(id));
+            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         /// <summary>
@@ -62,9 +52,9 @@ namespace EntityFrameWorkCore
         /// </summary>
         /// <param name="predicate">lambda表达式条件</param>
         /// <returns></returns>
-        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbContext.Set<TEntity>().FirstOrDefault(predicate);
+            return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
         /// <summary>
@@ -72,9 +62,9 @@ namespace EntityFrameWorkCore
         /// </summary>
         /// <param name="entity">实体</param>
         /// <returns></returns>
-        public TEntity Insert(TEntity entity)
+        public async Task<TEntity> Insert(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Add(entity);
+            await _dbContext.Set<TEntity>().AddAsync(entity);
             return entity;
         }
 
@@ -84,20 +74,9 @@ namespace EntityFrameWorkCore
         /// <param name="entity">实体</param>
         public TEntity Update(TEntity entity)
         {
-            _dbContext.Set<TEntity>().Attach(entity);
+             _dbContext.Set<TEntity>().Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             return entity;
-        }
-
-        /// <summary>
-        /// 新增或更新实体
-        /// </summary>
-        /// <param name="entity">实体</param>
-        public TEntity InsertOrUpdate(TEntity entity)
-        {
-            if (Get(entity.Id) != null)
-                return Update(entity);
-            return Insert(entity);
         }
 
         /// <summary>
@@ -110,36 +89,11 @@ namespace EntityFrameWorkCore
         }
 
         /// <summary>
-        /// 删除实体
-        /// </summary>
-        /// <param name="id">实体主键</param>
-        public void Delete(TPrimaryKey id)
-        {
-            _dbContext.Set<TEntity>().Remove(Get(id));
-        }
-
-        /// <summary>
         /// 事务性保存
         /// </summary>
-        public void Save()
+        public async Task Save()
         {
-            _dbContext.SaveChanges();
-        }
-
-        /// <summary>
-        /// 根据主键构建判断表达式
-        /// </summary>
-        /// <param name="id">主键</param>
-        /// <returns></returns>
-        protected static Expression<Func<TEntity, bool>> CreateEqualityExpressionForId(TPrimaryKey id)
-        {
-            var lambdaParam = Expression.Parameter(typeof(TEntity));
-            var lambdaBody = Expression.Equal(
-                Expression.PropertyOrField(lambdaParam, "Id"),
-                Expression.Constant(id, typeof(TPrimaryKey))
-                );
-
-            return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

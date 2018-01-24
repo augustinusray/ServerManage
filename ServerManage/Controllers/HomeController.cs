@@ -3,40 +3,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Enum;
+using Application.Iservices;
 using Microsoft.AspNetCore.Mvc;
 using ServerManage.Models;
+using ServerManage.ViewModels;
 
 namespace ServerManage.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHomeService _ihomeService;
+
+        public HomeController(IHomeService ihomeService)
+        {
+            _ihomeService = ihomeService;
+        }
+
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            return View();
-        }
+            var result= await _ihomeService.LoginValidate(model.UserName,model.PassWord);
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            if (result == LoginEnum.用户名错误 || result == LoginEnum.密码错误)
+                return Json(0);
+            else if (result == LoginEnum.登录成功)
+                return RedirectToAction("Index");
+            return View(model);
+        }     
     }
 }

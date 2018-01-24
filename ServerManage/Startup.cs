@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application;
+using Application.Iservices;
+using Domain.IRepositorys;
 using EntityFrameWorkCore;
+using EntityFrameWorkCore.Repositorys;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +28,15 @@ namespace ServerManage
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(option => { option.Filters.Add(typeof(CustomAuthorizeFilter)); });  // 全局过滤
+            //services.AddMvc(option => { option.Filters.Add(typeof(CustomAuthorizeFilter)); });  // 全局过滤
+            services.AddMvc();
             string conn = Configuration.GetConnectionString("ServerManageConnection");
             services.AddDbContext<ServerManageDbContext>(options => 
             options.UseSqlServer(conn));
+
+            //仓储注册
+            services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
