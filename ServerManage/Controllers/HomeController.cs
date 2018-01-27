@@ -29,10 +29,12 @@ namespace ServerManage.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
             var result= await _ihomeService.LoginValidate(model.UserName,model.PassWord);
 
             if (result == LoginEnum.用户名错误 || result == LoginEnum.密码错误)
-                return Json(0);
+                ModelState.AddModelError("","用户名或密码错误");
             else if (result == LoginEnum.登录成功)
                 return RedirectToAction("Index");
             return View(model);

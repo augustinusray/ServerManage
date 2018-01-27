@@ -1,4 +1,4 @@
-﻿
+﻿@model ServerManage.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Login";
     Layout = null;
@@ -17,21 +17,15 @@
             <h2 class="sub-title">ServerManage</h2>
         </div>
         <div class="cont-main clearfix">
-            <div class="tip" style="color:red">
-                <div class="validation-summary-valid" data-valmsg-summary="true">
-                    <ul>
-                        <li id="errormessage" style="display:none"></li>
-                    </ul>
-                </div>
-            </div>
-            <form id="loginform" method="post">
+            @Html.ValidationSummary()
+            <form id="loginform" asp-controller="Home" asp-action="Login" method="post">
                 <div class="login form">
                     <div class="group">
                         <div class="group-ipt email">
-                            <input type="text" name="UserName" id="username" class="ipt" placeholder="登录名" required="">
+                            <input asp-for="UserName" type="text"  class="ipt" placeholder="登录名" required="">
                         </div>
                         <div class="group-ipt password">
-                            <input type="password" name="PassWord" id="password" class="ipt" placeholder="登录密码" required="">
+                            <input asp-for="PassWord"  class="ipt" placeholder="登录密码" required="">
                         </div>
                         <div class="group-ipt verify">
                             <input type="text" name="verify" id="verify" class="ipt" placeholder="验证码">
@@ -40,7 +34,7 @@
                     </div>
                 </div>
                 <div class="button">
-                    <button type="button" id="button">登录</button>
+                    <button type="submit" id="button">登录</button>
                 </div>
             </form>
         </div>
@@ -53,32 +47,5 @@
     <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js" type="text/javascript"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
-    <script>
-        $("#button").click
-            (function () {
-                var arr = $('#loginform').serialize();
-                $.ajax({
-                    url: "/Home/Login",
-                    data: arr,
-                    type: "post",
-                    async: true,
-                    dataType: "json",
-                    success: function (data) {
-                        alert(JSON.stringify(data));
-                        if (data == 0) {
-                            $("#errormessage").show();
-                            $("#errormessage").html("登录名或密码错误");
-                            console.log('123');
-                        }
-                        else { $("#errormessage").hide(); }
-
-                    },
-                    error: function () {
-                        $("#errormessage").html("请检查您的网络");
-                    }
-                });
-            });
-
-    </script>
 </body>
 </html>
