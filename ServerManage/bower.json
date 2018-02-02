@@ -2,6 +2,7 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "jquery-ajax-unobtrusive": "jquery.unobtrusive-ajax#v3.2.4"
+    "jquery-ajax-unobtrusive": "jquery.unobtrusive-ajax#v3.2.4",
+    "chart.js": "Chart.js#v2.7.1"
   }
 }

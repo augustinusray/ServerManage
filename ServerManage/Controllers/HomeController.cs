@@ -38,6 +38,13 @@ namespace ServerManage.Controllers
             else if (result == LoginEnum.登录成功)
                 return RedirectToAction("Index");
             return View(model);
-        }     
+        }
+
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }
