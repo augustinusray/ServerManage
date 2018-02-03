@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "jquery-ajax-unobtrusive": "jquery.unobtrusive-ajax#v3.2.4",
-    "chart.js": "Chart.js#v2.7.1"
+    "chart.js": "Chart.js#v2.7.1",
+    "bootstrap-table": "1.11.1"
   }
 }

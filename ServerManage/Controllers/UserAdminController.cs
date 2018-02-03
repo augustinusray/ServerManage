@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ServerManage.Controllers
 {
-    public class AdminController : Controller
+    public class UserAdminController : Controller
     {
-        public IActionResult Index()
+        public IActionResult UserList()
         {
             return View();
         }
