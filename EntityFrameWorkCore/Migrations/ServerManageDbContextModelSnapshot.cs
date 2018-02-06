@@ -23,13 +23,19 @@ namespace EntityFrameWorkCore.Migrations
             modelBuilder.Entity("Domain.Entitys.ServerList", b =>
                 {
                     b.Property<string>("ServerId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256);
 
                     b.Property<int>("ServerAuthority");
 
-                    b.Property<string>("ServerName");
+                    b.Property<string>("ServerName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("ServerPass");
+                    b.Property<string>("ServerPass")
+                        .HasMaxLength(128);
 
                     b.HasKey("ServerId");
 
@@ -39,13 +45,16 @@ namespace EntityFrameWorkCore.Migrations
             modelBuilder.Entity("Domain.Entitys.UserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128);
 
                     b.Property<int>("UserAuthority");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("UserPass");
+                    b.Property<string>("UserPass")
+                        .HasMaxLength(128);
 
                     b.HasKey("UserId");
 

@@ -15,6 +15,6 @@ namespace Domain.IRepositorys
         /// </summary>
         /// <param name="para"></param>
         /// <returns></returns>
-        Task<List<ServerListDTO>> GetServerList(PagePara para);
+        Task<PaginatedItemsVM<ServerListDTO>> GetServerList(PagePara para);
     }
 }

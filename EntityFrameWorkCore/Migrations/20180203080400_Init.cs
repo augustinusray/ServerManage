@@ -12,10 +12,11 @@ namespace EntityFrameWorkCore.Migrations
                 name: "ServerList",
                 columns: table => new
                 {
-                    ServerId = table.Column<string>(nullable: false),
+                    ServerId = table.Column<string>(maxLength: 128, nullable: false),
+                    Description = table.Column<string>(maxLength: 256, nullable: true),
                     ServerAuthority = table.Column<int>(nullable: false),
-                    ServerName = table.Column<string>(nullable: true),
-                    ServerPass = table.Column<string>(nullable: true)
+                    ServerName = table.Column<string>(maxLength: 50, nullable: true),
+                    ServerPass = table.Column<string>(maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,10 +27,10 @@ namespace EntityFrameWorkCore.Migrations
                 name: "UserRole",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(maxLength: 128, nullable: false),
                     UserAuthority = table.Column<int>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    UserPass = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(maxLength: 50, nullable: true),
+                    UserPass = table.Column<string>(maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {

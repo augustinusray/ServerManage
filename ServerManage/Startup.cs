@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application;
+﻿using Application;
 using Application.Iservices;
 using Domain.IRepositorys;
 using EntityFrameWorkCore;
@@ -12,7 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ServerManage.Filters;
+using ServerManage.Logger;
 
 namespace ServerManage
 {
@@ -29,19 +27,31 @@ namespace ServerManage
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvc(option => { option.Filters.Add(typeof(CustomAuthorizeFilter)); });  // 全局过滤
-            services.AddMvc();
+
+            services.AddMvc(option => { option.Filters.Add(typeof(GlobalExceptionFilter)); });
+            //services.AddMvc();
             string conn = Configuration.GetConnectionString("ServerManageConnection");
             services.AddDbContext<ServerManageDbContext>(options => 
             options.UseSqlServer(conn));
 
-            //仓储注册
+            //服务注册
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IServerAdminService, ServerAdminService>();
+
+            //仓储注册
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.AddScoped<IServerListRepository, ServerListRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            //日志
+            loggerFactory.AddLog4Net();
+            loggerFactory.AddConsole();
+            loggerFactory.AddDebug(Microsoft.Extensions.Logging.LogLevel.Debug);
+            loggerFactory.AddEventSourceLogger();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

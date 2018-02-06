@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EntityFrameWorkCore.Repositorys
 {
-    public class ServerListRepository:Repository<ServerList,string>, IServerListRepository
+    public class ServerListRepository : Repository<ServerList, string>, IServerListRepository
     {
         public ServerListRepository(ServerManageDbContext dbcontext) : base(dbcontext)
         {
@@ -23,7 +23,7 @@ namespace EntityFrameWorkCore.Repositorys
         /// </summary>
         /// <param name="para"></param>
         /// <returns></returns>
-        public async Task<List<ServerListDTO>> GetServerList(PagePara para)
+        public async Task<PaginatedItemsVM<ServerListDTO>> GetServerList(PagePara para)
         {
             var q = from s in _dbContext.ServerList
                     orderby s.ServerName ascending
@@ -34,10 +34,15 @@ namespace EntityFrameWorkCore.Repositorys
                         ServerId = s.ServerId
                     };
 
+            var totalCount = q.Count();
+
+            if (totalCount == 0)
+                return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, new List<ServerListDTO>());
+
             var list = await q.Skip(para.PageSize * (para.PageIndex - 1)).Take(para.PageSize)
                 .ToListAsync();
 
-            return list;
+            return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, list);
         }
     }
 }

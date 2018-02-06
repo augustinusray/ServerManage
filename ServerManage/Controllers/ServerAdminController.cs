@@ -23,13 +23,12 @@ namespace ServerManage.Controllers
             return View();
         }
 
-        
+        [HttpPost]
         public async Task<IActionResult> GetServerList(PagePara para)
         {
+            var model = await _serverAdminService.GetServerList(para);
 
-           var list=await _serverAdminService.GetServerList(para);
-
-            return Json(list);
+            return Json(new { total = model.Count, rows = model.Data });
         }
     }
 }

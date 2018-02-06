@@ -7,7 +7,7 @@ namespace Domain.Entitys
 {
     public class ServerList
     {
-        [MaxLength(50)]
+        [MaxLength(128)]
         public string ServerId { get; set; }
 
         [MaxLength(50)]
@@ -15,9 +15,14 @@ namespace Domain.Entitys
 
         [MaxLength(128)]
         public string ServerPass { get; set; }
-
+        /// <summary>
+        /// 授权
+        /// </summary>
+        [Range(1,10)]
         public int ServerAuthority { get; set; }
-
+        /// <summary>
+        /// 描述
+        /// </summary>
         [MaxLength(256)]
         public string Description { get; set; }
     }

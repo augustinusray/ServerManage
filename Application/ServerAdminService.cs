@@ -30,7 +30,7 @@ namespace Application
         /// </summary>
         /// <param name="para"></param>
         /// <returns></returns>
-        public async Task<List<ServerListDTO>> GetServerList(PagePara para)
+        public async Task<PaginatedItemsVM<ServerListDTO>> GetServerList(PagePara para)
         {
             return await _iserverlistrepository.GetServerList(para);
         }
