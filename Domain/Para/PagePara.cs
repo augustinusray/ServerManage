@@ -10,7 +10,7 @@ namespace Domain.Para
 
         public int PageIndex { get; set; }
 
-        public string ServerName { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
     }

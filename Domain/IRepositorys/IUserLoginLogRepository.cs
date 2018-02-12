@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.IRepositorys
 {
-    public interface IUserRoleRepository:IRepository<UserRole,string>
+    public interface IUserLoginLogRepository : IRepository<UserLoginLog, int>
     {
     }
 }

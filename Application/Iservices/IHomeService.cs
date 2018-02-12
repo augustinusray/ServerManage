@@ -1,4 +1,5 @@
 ﻿using Application.Enum;
+using Domain.Entitys;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,13 +9,13 @@ namespace Application.Iservices
 {
     public interface IHomeService
     {
-        /// <summary>
-        /// 登录验证
-        /// </summary>
-        /// <param name="username">用户名</param>
-        /// <param name="password">密码</param>
-        /// <returns></returns>
-        Task<LoginEnum> LoginValidate(string username, string password);
 
+        /// <summary>
+        /// 新增登录日志
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task AddUserLoginLog(string ip, string userId);
     }
 }

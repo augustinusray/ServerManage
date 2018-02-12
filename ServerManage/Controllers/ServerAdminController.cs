@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Application.Iservices;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Para;
+using ServerManage.ViewModels;
 
 namespace ServerManage.Controllers
 {
-    public class ServerAdminController : Controller
+    public class ServerAdminController : BaseController
     {
         private readonly IServerAdminService _serverAdminService;
 
@@ -29,6 +30,19 @@ namespace ServerManage.Controllers
             var model = await _serverAdminService.GetServerList(para);
 
             return Json(new { total = model.Count, rows = model.Data });
+        }
+
+
+        [HttpGet]
+        public IActionResult AddServer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddServer(AddServerVM model)
+        {
+            return View();
         }
     }
 }

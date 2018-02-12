@@ -9,33 +9,30 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public class ServerAdminService:IServerAdminService
+    public class UserAdminService:IUserAdminService
     {
         /// <summary>
         /// 仓储
         /// </summary>
-        private readonly IServerListRepository _iserverlistrepository;
+        private readonly IUserRepository _iuserrepository;
 
         /// <summary>
         /// 注入仓储
         /// </summary>
-        /// <param name="iserverlistrepository"></param>
-        public ServerAdminService(IServerListRepository iserverlistrepository)
+        /// <param name="iuserrepository"></param>
+        public UserAdminService(IUserRepository iuserrepository)
         {
-            _iserverlistrepository = iserverlistrepository;
+            _iuserrepository = iuserrepository;
         }
 
         /// <summary>
-        /// 服务器列表分页
+        /// 用户列表分页
         /// </summary>
         /// <param name="para"></param>
         /// <returns></returns>
-        public async Task<PaginatedItemsVM<ServerListDTO>> GetServerList(PagePara para)
+        public async Task<PaginatedItemsVM<UserDTO>> GetUserList(PagePara para)
         {
-            return await _iserverlistrepository.GetServerList(para);
+            return await _iuserrepository.GetUserList(para);
         }
-
-
-        
     }
 }

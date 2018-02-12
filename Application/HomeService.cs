@@ -10,29 +10,32 @@ namespace Application
 {
     public class HomeService:IHomeService
     {
-        private readonly IUserRoleRepository _iuserrolerepository;
+        private readonly IUserRepository _iuserrepository;
+        private readonly IUserLoginLogRepository _userLoginLogRepository;
 
-        public HomeService(IUserRoleRepository iuserrolerepository)
+        public HomeService(IUserRepository iuserrepository, IUserLoginLogRepository userLoginLogRepository)
         {
-            _iuserrolerepository = iuserrolerepository;
+            _iuserrepository = iuserrepository;
+            _userLoginLogRepository = userLoginLogRepository;
         }
 
         /// <summary>
-        /// 登录验证
+        /// 新增登录日志
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <param name="password">密码</param>
+        /// <param name="ip"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<LoginEnum> LoginValidate(string username,string password)
+        public async Task AddUserLoginLog(string ip,string userId)
         {
-            var user= await _iuserrolerepository.FirstOrDefault(m=>m.UserName.Equals(username));
+            var entity = new UserLoginLog
+            {
+                Ip = ip,
+                LoginTime = DateTime.Now,
+                UserId = userId
+            };
+            await _userLoginLogRepository.Insert(entity);
 
-            if (user == null)
-                return LoginEnum.用户名错误;
-            else if (!AESDEncrypt.Decrypt(user.UserPass).Equals(password))
-                return LoginEnum.密码错误;
-            else
-                return LoginEnum.登录成功;
+            await _userLoginLogRepository.Save();
         }
     }
 }

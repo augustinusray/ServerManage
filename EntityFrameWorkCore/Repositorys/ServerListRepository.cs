@@ -25,22 +25,27 @@ namespace EntityFrameWorkCore.Repositorys
         /// <returns></returns>
         public async Task<PaginatedItemsVM<ServerListDTO>> GetServerList(PagePara para)
         {
-            var q = from s in _dbContext.ServerList
-                    orderby s.ServerName ascending
-                    select new ServerListDTO
-                    {
-                        ServerName = s.ServerName,
-                        ServerAuthority = s.ServerAuthority,
-                        ServerId = s.ServerId
-                    };
+            var query =_dbContext.ServerList.AsQueryable();
 
-            var totalCount = q.Count();
+            if (!string.IsNullOrEmpty(para.Name))
+                query.Where(m=>m.ServerName.Contains(para.Name));
+
+            if (!string.IsNullOrEmpty(para.Description))
+                query.Where(m => m.Description.Contains(para.Description));
+
+            var totalCount = query.Count();
 
             if (totalCount == 0)
                 return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, new List<ServerListDTO>());
 
-            var list = await q.Skip(para.PageSize * (para.PageIndex - 1)).Take(para.PageSize)
-                .ToListAsync();
+            var list = await query.Skip(para.PageSize * (para.PageIndex - 1))
+                .Take(para.PageSize)
+                .Select(x=>new ServerListDTO {
+                    ServerName=x.ServerName,
+                    ServerAuthority=x.ServerAuthority,
+                    ServerId=x.ServerId,
+                    Description=x.Description
+                }).ToListAsync();
 
             return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, list);
         }

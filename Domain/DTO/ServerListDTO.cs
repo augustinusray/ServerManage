@@ -11,5 +11,7 @@ namespace Domain.DTO
         public string ServerName { get; set; }
 
         public int ServerAuthority { get; set; }
+
+        public string Description { get; set; }
     }
 }
