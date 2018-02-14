@@ -11,9 +11,10 @@ using System;
 namespace ServerManage.Data.Migrations
 {
     [DbContext(typeof(ServerManageDbContext))]
-    partial class ServerManageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180214101135_20180214610")]
+    partial class _20180214610
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

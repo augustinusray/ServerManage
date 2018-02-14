@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.Iservices;
+using AutoMapper;
 using Domain.Entitys;
 using Domain.IRepositorys;
 using EntityFrameWorkCore;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServerManage.Filters;
+using ServerManage.Infrastructure;
 using ServerManage.Logger;
 using System;
 
@@ -19,9 +21,16 @@ namespace ServerManage
 {
     public class Startup
     {
+        private MapperConfiguration _mapperConfiguration { get; set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            _mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +38,9 @@ namespace ServerManage
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //mapper
+            services.AddSingleton<IMapper>(sp => _mapperConfiguration.CreateMapper());
+            //数据库连接
             string conn = Configuration.GetConnectionString("ServerManageConnection");
             services.AddDbContext<ServerManageDbContext>(options => 
             options.UseSqlServer(conn,b=> b.MigrationsAssembly("ServerManage")));
@@ -45,7 +56,7 @@ namespace ServerManage
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 6;
 
@@ -73,10 +84,12 @@ namespace ServerManage
             //服务注册
             services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<IServerAdminService, ServerAdminService>();
+            services.AddScoped<IUserAdminService, UserAdminService>();
 
             //仓储注册
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IServerListRepository, ServerListRepository>();
+            services.AddScoped<IUserLoginLogRepository, UserLoginLogRepository>();
 
             //services.AddMvc(option => { option.Filters.Add(typeof(CustomAuthorizeFilter)); });  // 全局过滤
 

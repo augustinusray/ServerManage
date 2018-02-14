@@ -8,9 +8,6 @@ namespace ServerManage.ViewModels
 {
     public class AddServerVM
     {
-        [MaxLength(128)]
-        public string ServerId { get; set; }
-
         [MaxLength(50)]
         public string ServerName { get; set; }
 
