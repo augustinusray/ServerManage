@@ -6,6 +6,8 @@ using Application.Iservices;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Para;
 using ServerManage.ViewModels;
+using AutoMapper;
+using Domain.Entitys;
 
 namespace ServerManage.Controllers
 {
@@ -13,9 +15,12 @@ namespace ServerManage.Controllers
     {
         private readonly IServerAdminService _serverAdminService;
 
-        public ServerAdminController(IServerAdminService serverAdminService)
+        private readonly IMapper _imapper;
+
+        public ServerAdminController(IServerAdminService serverAdminService, IMapper mapper)
         {
             _serverAdminService = serverAdminService;
+            _imapper = mapper;
         }
 
         [HttpGet]
@@ -25,7 +30,7 @@ namespace ServerManage.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetServerList(PagePara para)
+        public async Task<IActionResult> GetServerList([FromBody]PagePara para)
         {
             var model = await _serverAdminService.GetServerList(para);
 
@@ -40,9 +45,13 @@ namespace ServerManage.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddServer(AddServerVM model)
+        public async Task<IActionResult> AddServer(AddServerVM model)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return View(model);
+            var server = _imapper.Map<AddServerVM, ServerList>(model);
+            await _serverAdminService.AddServer(server);
+            return ModalAlert("", "添加成功", "Success");
         }
     }
 }

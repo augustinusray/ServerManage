@@ -54,11 +54,11 @@ namespace ServerManage
             {
                 // Password settings
                 options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
-                options.Password.RequiredUniqueChars = 6;
+                options.Password.RequiredUniqueChars = 3;
 
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);

@@ -10,17 +10,6 @@ namespace Domain.DTO
     /// <typeparam name="TEntity"></typeparam>
     public class PaginatedItemsVM<TEntity> where TEntity : class
     {
-
-        /// <summary>
-        /// 页码
-        /// </summary>
-        public int PageIndex { get; private set; }
-
-        /// <summary>
-        /// 每页显示数量
-        /// </summary>
-        public int PageSize { get; private set; }
-
         /// <summary>
         /// 总记录数
         /// </summary>
@@ -45,10 +34,8 @@ namespace Domain.DTO
         /// <param name="count"></param>
         /// <param name="data"></param>
 
-        public PaginatedItemsVM(int pageIndex, int pageSize, int count, IEnumerable<TEntity> data, dynamic total = null)
+        public PaginatedItemsVM(int count, IEnumerable<TEntity> data, dynamic total = null)
         {
-            this.PageIndex = pageIndex;
-            this.PageSize = pageSize;
             this.Count = count;
             this.Data = data;
             this.Total = total;

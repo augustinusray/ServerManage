@@ -1,5 +1,6 @@
 ﻿using Application.Iservices;
 using Domain.DTO;
+using Domain.Entitys;
 using Domain.IRepositorys;
 using Domain.Para;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public class ServerAdminService:IServerAdminService
+    public class ServerAdminService : IServerAdminService
     {
         /// <summary>
         /// 仓储
@@ -35,7 +36,17 @@ namespace Application
             return await _iserverlistrepository.GetServerList(para);
         }
 
+        /// <summary>
+        /// 服务器列表分页
+        /// </summary>
+        /// <param name="para"></param>
+        /// <returns></returns>
+        public async Task AddServer(ServerList model)
+        {
+            model.ServerId = Guid.NewGuid().ToString();
+            await _iserverlistrepository.Insert(model);
+            await _iserverlistrepository.Save();
+        }
 
-        
     }
 }

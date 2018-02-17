@@ -39,10 +39,10 @@ namespace EntityFrameWorkCore.Repositorys
             var totalCount = query.Count();
 
             if (totalCount == 0)
-                return new PaginatedItemsVM<UserDTO>(para.PageIndex, para.PageSize, totalCount, new List<UserDTO>());
+                return new PaginatedItemsVM<UserDTO>(totalCount, new List<UserDTO>());
 
-            var list = await query.Skip(para.PageSize * (para.PageIndex - 1))
-                .Take(para.PageSize)
+            var list = await query.Skip(para.Offset)
+                .Take(para.Limit)
                 .Select(x => new UserDTO
                 {
                     UserId=x.Id,
@@ -51,7 +51,7 @@ namespace EntityFrameWorkCore.Repositorys
                     Description = x.Description
                 }).ToListAsync();
 
-            return new PaginatedItemsVM<UserDTO>(para.PageIndex, para.PageSize, totalCount, list);
+            return new PaginatedItemsVM<UserDTO>(totalCount, list);
         }
     }
 }

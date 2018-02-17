@@ -109,8 +109,8 @@
         //得到查询的参数
         oTableInit.queryParams = function (params) {
             var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                PageSize: params.limit,   //页面大小
-                PageIndex: params.offset,  //页码
+                Limit: params.limit,   //页面大小
+                Offset: params.offset,  //页码
                 Name: $("#txt_search_servername").val(),
                 Description: $("#txt_search_description").val()
             };

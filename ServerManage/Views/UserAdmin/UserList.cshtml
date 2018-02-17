@@ -7,7 +7,7 @@
 <script src="~/lib/bootstrap-table/dist/bootstrap-table.js"></script>
 <link href="~/lib/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet" />
 <script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
-<h2>ServerList</h2>
+<h2>UserList</h2>
 
 <div class="panel panel-default">
     <div class="panel-heading">查询条件</div>
@@ -84,37 +84,41 @@
                 minimumCountColumns: 2,             //最少允许的列数
                 clickToSelect: true,                //是否启用点击选中行
                 height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-                uniqueId: "UserId",                     //每一行的唯一标识，一般为主键列
+                uniqueId: "userId",                     //每一行的唯一标识，一般为主键列
                 showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
                 cardView: false,                    //是否显示详细视图
                 detailView: false,                   //是否显示父子表
                 columns: [{
                     checkbox: true
                 }, {
-                    field: 'UserId',
+                    field: 'userId',
                     title: 'ID'
                 }, {
-                    field: 'UserName',
+                    field: 'userName',
                     title: '账号'
                 }, {
-                    field: 'ServerAuthority',
+                    field: 'userAuthority',
                     title: '权限级别'
                 }, {
-                    field: 'Description',
+                    field: 'description',
                     title: '描述'
                 },]
+                ,
+                onLoadError: function () {  //加载失败时执行
+                    alert("网络异常");
+                }
             });
         };
 
         //得到查询的参数
         oTableInit.queryParams = function (params) {
-            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                PageSize: params.limit,   //页面大小
-                PageIndex: params.offset,  //页码
+            var para = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                Limit: params.limit,   //页面大小
+                Offset: params.offset,  //第几行
                 Name: $("#txt_search_username").val(),
                 Description: $("#txt_search_description").val()
             };
-            return temp;
+            return para;
         };
         return oTableInit;
     };

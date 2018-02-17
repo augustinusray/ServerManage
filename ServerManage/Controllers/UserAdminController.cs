@@ -35,7 +35,7 @@ namespace ServerManage.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserList(PagePara para)
+        public async Task<IActionResult> GetUserList([FromBody]PagePara para)
         {
             var model = await _userAdminService.GetUserList(para);
 

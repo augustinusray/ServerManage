@@ -36,10 +36,10 @@ namespace EntityFrameWorkCore.Repositorys
             var totalCount = query.Count();
 
             if (totalCount == 0)
-                return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, new List<ServerListDTO>());
+                return new PaginatedItemsVM<ServerListDTO>(totalCount, new List<ServerListDTO>());
 
-            var list = await query.Skip(para.PageSize * (para.PageIndex - 1))
-                .Take(para.PageSize)
+            var list = await query.Skip(para.Limit)
+                .Take(para.Offset)
                 .Select(x=>new ServerListDTO {
                     ServerName=x.ServerName,
                     ServerAuthority=x.ServerAuthority,
@@ -47,7 +47,7 @@ namespace EntityFrameWorkCore.Repositorys
                     Description=x.Description
                 }).ToListAsync();
 
-            return new PaginatedItemsVM<ServerListDTO>(para.PageIndex, para.PageSize, totalCount, list);
+            return new PaginatedItemsVM<ServerListDTO>(totalCount, list);
         }
     }
 }

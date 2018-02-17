@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entitys;
+using ServerManage.ViewModels;
 using ServerManage.ViewModels.UserAdmin;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace ServerManage.Infrastructure
         public AutoMapperProfile()
         {
             CreateMap<AddUserVM, User>();
+            CreateMap<AddServerVM, ServerList>();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ServerManage.Controllers
         public IActionResult ModalAlert(string title,string alertMessage,string type)
         {
             var script = String.Format("<script>$('.modal').modal('hide');notifyMsg('{0}','{1}','{2}');</script>", title,alertMessage,type);
-            return Content(script, "text/javascript");
+            return Content(script, "text/html");
         }
     }
 }
