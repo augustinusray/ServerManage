@@ -9,29 +9,39 @@
 
 <script src="~/lib/chart.js/dist/Chart.js"></script>
 <script type="text/javascript">
-    var data = {
-        labels: ["Server", "User"],
-        datasets: [
-            {
-                fillColor: "rgba(54, 162, 235, 0.6)",
-                strokeColor: "rgba(220,220,220,1)",
-                data: [65, 34],
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)'
-                ]
-            }
-        ]
-    }
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Home/GetServerAndUser",
+            type: "Get",
+            contentType: "application/json",
+            success: function (data, textStatus, jqXHR) {
+                var chartdata = {
+                    labels: ["Server Counts", "User Counts"],
+                    datasets: [
+                        {
+                            fillColor: "rgba(54, 162, 235, 0.6)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            data: data,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 206, 86, 0.6)'
+                            ]
+                        }
+                    ]
+                }
 
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myNewChart = new Chart(ctx, {
-        type: 'bar', data: data, options: {
-            legend: {
-                display: false
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var myNewChart = new Chart(ctx, {
+                    type: 'bar', data: chartdata, options: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                });
             }
-        }
+        });
     });
+
 </script>
 
 

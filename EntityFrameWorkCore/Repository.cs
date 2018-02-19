@@ -89,6 +89,15 @@ namespace EntityFrameWorkCore
         }
 
         /// <summary>
+        /// 获取实体数量
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> GetCount()
+        {
+            return await _dbContext.Set<TEntity>().CountAsync();
+        }
+
+        /// <summary>
         /// 事务性保存
         /// </summary>
         public async Task Save()

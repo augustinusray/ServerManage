@@ -10,13 +10,15 @@ namespace Application
 {
     public class HomeService:IHomeService
     {
-        private readonly IUserRepository _iuserrepository;
+        private readonly IUserRepository _userrepository;
+        private readonly IServerListRepository _serverListRepository;
         private readonly IUserLoginLogRepository _userLoginLogRepository;
 
-        public HomeService(IUserRepository iuserrepository, IUserLoginLogRepository userLoginLogRepository)
+        public HomeService(IUserRepository iuserrepository, IUserLoginLogRepository userLoginLogRepository, IServerListRepository serverListRepository)
         {
-            _iuserrepository = iuserrepository;
+            _userrepository = iuserrepository;
             _userLoginLogRepository = userLoginLogRepository;
+            _serverListRepository = serverListRepository;
         }
 
         /// <summary>
@@ -36,6 +38,19 @@ namespace Application
             await _userLoginLogRepository.Insert(entity);
 
             await _userLoginLogRepository.Save();
+        }
+
+        /// <summary>
+        /// 获取 服务器/用户 数量
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int[]> GetServerAndUser()
+        {
+            var serverCount=await _serverListRepository.GetCount();
+
+            var userCount = await _userrepository.GetCount();
+
+            return new int[] { serverCount, userCount };
         }
     }
 }

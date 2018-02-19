@@ -17,5 +17,12 @@ namespace Application.Iservices
         /// <param name="userId"></param>
         /// <returns></returns>
         Task AddUserLoginLog(string ip, string userId);
+
+
+        /// <summary>
+        /// 获取 服务器/用户 数量
+        /// </summary>
+        /// <returns></returns>
+        Task<int[]> GetServerAndUser();
     }
 }

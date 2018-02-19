@@ -59,6 +59,14 @@ namespace Domain
         void Delete(TEntity entity);
 
 
+
+        /// <summary>
+        /// 获取实体数量
+        /// </summary>
+        /// <returns></returns>
+        Task<int> GetCount();
+
+
         /// <summary>
         /// 事务性保存
         /// </summary>

@@ -71,6 +71,13 @@ namespace ServerManage.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetServerAndUser()
+        {
+            var counts=await _ihomeService.GetServerAndUser();
+            return Json(counts);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> LogOut()

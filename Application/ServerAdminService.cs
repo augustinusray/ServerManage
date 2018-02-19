@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Utility;
 
 namespace Application
 {
@@ -43,7 +44,7 @@ namespace Application
         /// <returns></returns>
         public async Task AddServer(ServerList model)
         {
-            model.ServerId = Guid.NewGuid().ToString();
+            model.ServerPass = AESDEncrypt.Encrypt(model.ServerPass);
             await _iserverlistrepository.Insert(model);
             await _iserverlistrepository.Save();
         }

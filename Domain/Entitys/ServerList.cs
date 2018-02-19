@@ -8,7 +8,7 @@ namespace Domain.Entitys
     public class ServerList
     {
         [MaxLength(128)]
-        public string ServerId { get; set; }
+        public string ServerId { get; set; } = Guid.NewGuid().ToString();
 
         [MaxLength(50)]
         public string ServerName { get; set; }
