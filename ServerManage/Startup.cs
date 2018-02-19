@@ -115,6 +115,8 @@ namespace ServerManage
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            //初始管理员账号
+            DatabaseInitializer.Initialize(app);
 
             app.UseStaticFiles();
 
