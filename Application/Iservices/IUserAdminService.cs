@@ -15,5 +15,13 @@ namespace Application.Iservices
         /// <param name="para"></param>
         /// <returns></returns>
         Task<PaginatedItemsVM<UserDTO>> GetUserList(PagePara para);
+
+
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        Task<int> DeleteUser(string[] users);
     }
 }

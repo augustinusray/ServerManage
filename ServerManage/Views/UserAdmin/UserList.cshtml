@@ -7,20 +7,22 @@
 <script src="~/lib/bootstrap-table/dist/bootstrap-table.js"></script>
 <link href="~/lib/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet" />
 <script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
+<script src="~/js/jqueryToken.js"></script>
 <h2>UserList</h2>
 
 <div class="panel panel-default">
     <div class="panel-heading">查询条件</div>
     <div class="panel-body">
         <form id="formSearch" class="form-horizontal">
+            @Html.AntiForgeryToken()
             <div class="form-group" style="margin-top:15px">
-                <label class="control-label col-sm-1" for="txt_search_username">用户名</label>
+                <label class="control-label col-sm-1" for="Name">用户名</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" id="txt_search_username">
+                    <input type="text" name="Name" class="form-control" id="Name">
                 </div>
-                <label class="control-label col-sm-1" for="txt_search_description">描述</label>
+                <label class="control-label col-sm-1" for="Description">描述</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" id="txt_search_description">
+                    <input type="text" class="form-control" name="Description" id="Description">
                 </div>
                 <div class="col-sm-4" style="text-align:left;">
                     <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
@@ -43,7 +45,12 @@
 </div>
 <table id="tb_userlist"></table>
 
-
+<div id="userModal" data-empty="true" class="modal fade bs-example-modal-lg" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="usercontent">
+        </div>
+    </div>
+</div>
 <script>
     $(function () {
 
@@ -65,7 +72,7 @@
             $('#tb_userlist').bootstrapTable({
                 url: '/UserAdmin/GetUserList',         //请求后台的URL（*）
                 method: 'post',                      //请求方式（*）
-                ContentType: 'application/json',
+                contentType: "application/x-www-form-urlencoded",
                 toolbar: '#toolbar',                //工具按钮用哪个容器
                 striped: true,                      //是否显示行间隔色
                 cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -78,7 +85,7 @@
                 pageSize: 10,                       //每页的记录行数（*）
                 pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
                 search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-                strictSearch: true,
+                strictSearch: false,
                 showColumns: true,                  //是否显示所有的列
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 2,             //最少允许的列数
@@ -112,13 +119,11 @@
 
         //得到查询的参数
         oTableInit.queryParams = function (params) {
-            var para = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                Limit: params.limit,   //页面大小
-                Offset: params.offset,  //第几行
-                Name: $("#txt_search_username").val(),
-                Description: $("#txt_search_description").val()
-            };
-            return para;
+            //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            var frmData = $('#formSearch').serializeArray();
+            frmData.push({ name: "Limit", value: params.limit });
+            frmData.push({ name: "length", value: params.offset });
+            return frmData;
         };
         return oTableInit;
     };
@@ -126,13 +131,51 @@
 
     var ButtonInit = function () {
         var oInit = new Object();
-        var postdata = {};
-
         oInit.Init = function () {
             //初始化页面上面的按钮事件
+            $("#btn_add").click(function () {
+                $("#userModal").modal({
+                    remote: 'AddUser'
+                });
+            });
+
+            $("#btn_delete").click(function () {
+                //获取被选中记录
+                var rows = $('#tb_userlist').bootstrapTable('getSelections');
+                if (rows.length == 0) {
+                    Ewin.alert("请先选择要删除的记录!");
+                    return;
+                }
+                var ids = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    ids[i] = rows[i]['userId'];
+                }
+                deleteUser(ids);
+            });
         };
 
         return oInit;
     };
+
+
+    function deleteUser(ids) {
+        Ewin.confirm({ message: "确认要删除选择的数据吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajaxAntiForgery({
+                url: "DeleteUser",
+                type: "Post",
+                data: {
+                    users: ids
+                },
+                success: function (data) {            
+                    //重新加载记录
+                    $("#tb_userlist").bootstrapTable('refresh');
+                    notifyMsg("", "删除了" + data + "条数据", "success");
+                }
+            });
+        });
+    }
 </script>
 

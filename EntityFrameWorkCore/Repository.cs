@@ -86,7 +86,7 @@ namespace EntityFrameWorkCore
         public void Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-        }
+        }   
 
         /// <summary>
         /// 获取实体数量
@@ -100,9 +100,9 @@ namespace EntityFrameWorkCore
         /// <summary>
         /// 事务性保存
         /// </summary>
-        public async Task Save()
+        public async Task<int> Save()
         {
-            await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

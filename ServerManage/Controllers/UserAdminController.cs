@@ -35,7 +35,8 @@ namespace ServerManage.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserList([FromBody]PagePara para)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetUserList(PagePara para)
         {
             var model = await _userAdminService.GetUserList(para);
 
@@ -56,7 +57,7 @@ namespace ServerManage.Controllers
             var user = _imapper.Map<AddUserVM, User>(model);
             var result = await _userManager.CreateAsync(user, model.UserPass);
             if (result.Succeeded)
-                return ModalAlert("", "添加成功", "Success");
+                return RedirectToAction("UserList");
             else
             {
                 foreach (var error in result.Errors)
@@ -65,6 +66,15 @@ namespace ServerManage.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string[] users)
+        {
+            var result=await _userAdminService.DeleteUser(users);
+
+            return Json(result);
         }
     }
 }

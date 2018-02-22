@@ -58,8 +58,6 @@ namespace Domain
         /// <param name="entity">要删除的实体</param>
         void Delete(TEntity entity);
 
-
-
         /// <summary>
         /// 获取实体数量
         /// </summary>
@@ -70,6 +68,6 @@ namespace Domain
         /// <summary>
         /// 事务性保存
         /// </summary>
-        Task Save();
+        Task<int> Save();
     }
 }
