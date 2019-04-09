@@ -1,17 +1,24 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServerManage.ViewModels.UserAdmin
 {
-    public class AddUserVM
+    public class EditUserVM
     {
+        [HiddenInput]
+        [MaxLength(450)]
+        public string Id { get; set; }
+
         [MaxLength(50)]
-        [Display(Name ="账号")]
-        [Required(ErrorMessage ="请输入账号")]
+        [Display(Name = "账号")]
+        [Required]
         [RegularExpression("^[a-zA-Z0-9_]{6,20}$", ErrorMessage = "用户名由6位至20位字母或数字组成。")]
+        [ReadOnly(true)]
         public string UserName { get; set; }
 
         [StringLength(20, ErrorMessage = "{0} 必须至少包含 {2} 个字符,最多20个字符。", MinimumLength = 6)]
@@ -20,15 +27,10 @@ namespace ServerManage.ViewModels.UserAdmin
         [DataType(DataType.Password)]
         public string UserPass { get; set; }
 
-        [StringLength(20, ErrorMessage = "{0} 必须至少包含 {2} 个字符,最多20个字符。", MinimumLength = 6)]
-        [Display(Name = "确认密码")]
-        [DataType(DataType.Password)]
-        [Compare("UserPass",ErrorMessage = "两次密码输入不一致")]
-        public string ConfirmUserPass { get; set; }
         /// <summary>
         /// 授权
         /// </summary>
-        [Range(1, 10,ErrorMessage ="权限必须在1和10之间")]
+        [Range(1, 10, ErrorMessage = "权限必须在1和10之间")]
         [Display(Name = "权限")]
         [Required(ErrorMessage = "请输入权限")]
         public int UserAuthority { get; set; }

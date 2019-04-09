@@ -10,8 +10,8 @@ namespace Domain.Para
 
         public int Offset { get; set; }
 
-        public string Name { get; set; }
+        public string Search_Name { get; set; }
 
-        public string Description { get; set; }
+        public string Search_Description { get; set; }
     }
 }

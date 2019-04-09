@@ -1,12 +1,7 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "UserList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-@*3、bootstrap table组件以及中文包的引用*@
-<script src="~/lib/bootstrap-table/dist/bootstrap-table.js"></script>
-<link href="~/lib/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet" />
-<script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
 <script src="~/js/jqueryToken.js"></script>
 <h2>UserList</h2>
 
@@ -16,13 +11,13 @@
         <form id="formSearch" class="form-horizontal">
             @Html.AntiForgeryToken()
             <div class="form-group" style="margin-top:15px">
-                <label class="control-label col-sm-1" for="Name">用户名</label>
+                <label class="control-label col-sm-1" for="Search_Name">用户名</label>
                 <div class="col-sm-3">
-                    <input type="text" name="Name" class="form-control" id="Name">
+                    <input type="text" name="Search_Name" class="form-control" id="Search_Name">
                 </div>
-                <label class="control-label col-sm-1" for="Description">描述</label>
+                <label class="control-label col-sm-1" for="Search_Description">描述</label>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" name="Description" id="Description">
+                    <input type="text" class="form-control" name="Search_Description" id="Search_Description">
                 </div>
                 <div class="col-sm-4" style="text-align:left;">
                     <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
@@ -138,7 +133,21 @@
                     remote: 'AddUser'
                 });
             });
-
+            $("#btn_edit").click(function () {
+                //获取被选中记录
+                var rows = $('#tb_userlist').bootstrapTable('getSelections');
+                if (rows.length == 0) {
+                    Ewin.alert("请先选择要删除的记录!");
+                    return;
+                }
+                if (rows.length > 1) {
+                    Ewin.alert("只能选择一条记录!");
+                    return;
+                }
+                $("#userModal").modal({
+                    remote: 'EditUser?userId=' + rows[0]['userId']
+                });
+            });
             $("#btn_delete").click(function () {
                 //获取被选中记录
                 var rows = $('#tb_userlist').bootstrapTable('getSelections');
@@ -169,7 +178,7 @@
                 data: {
                     users: ids
                 },
-                success: function (data) {            
+                success: function (data) {
                     //重新加载记录
                     $("#tb_userlist").bootstrapTable('refresh');
                     notifyMsg("", "删除了" + data + "条数据", "success");
@@ -177,5 +186,6 @@
             });
         });
     }
+
 </script>
 

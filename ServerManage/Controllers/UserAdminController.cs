@@ -76,5 +76,25 @@ namespace ServerManage.Controllers
 
             return Json(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string userId)
+        {
+            _userManager.pas
+            var user = await _userAdminService.GetUser(userId);
+            var model = _imapper.Map<User, EditUserVM>(user);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserVM model)
+        {
+            var user = _imapper.Map<EditUserVM, User>(model);
+
+            var result = await _userAdminService.UpdateUser(user);
+
+            return RedirectToAction("UserList");
+        }
     }
 }

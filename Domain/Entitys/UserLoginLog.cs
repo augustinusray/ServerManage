@@ -20,7 +20,7 @@ namespace Domain.Entitys
         /// 
         /// </summary>
         [MaxLength(256)]
-        [Required(ErrorMessage = "{0}不能为空")]
+        [Required]
         public string UserId { get; set; }
 
         /// <summary>

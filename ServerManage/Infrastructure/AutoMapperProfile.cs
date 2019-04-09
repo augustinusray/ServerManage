@@ -21,6 +21,8 @@ namespace ServerManage.Infrastructure
         {
             CreateMap<AddUserVM, User>();
             CreateMap<AddServerVM, ServerList>();
+            CreateMap<EditUserVM, User>();
+            CreateMap<User, EditUserVM>();
         }
     }
 }

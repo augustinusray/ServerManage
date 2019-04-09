@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entitys;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application
 {
@@ -17,12 +18,15 @@ namespace Application
         /// </summary>
         private readonly IUserRepository _iuserrepository;
 
+        private UserManager<User> _userManager;
+
         /// <summary>
         /// 注入仓储
         /// </summary>
         /// <param name="iuserrepository"></param>
-        public UserAdminService(IUserRepository iuserrepository)
+        public UserAdminService(UserManager<User> userManager, IUserRepository iuserrepository)
         {
+            _userManager = userManager;
             _iuserrepository = iuserrepository;
         }
 
@@ -43,15 +47,40 @@ namespace Application
         /// <returns></returns>
         public async Task<int> DeleteUser(string[] users)
         {
+            int count=0;
             foreach (var userId in users)
             {
-                var user = await _iuserrepository.FirstOrDefault(m => m.Id.Equals(userId));
+                var user = await GetUser(userId);
                 if (user != null)
                 {
-                    _iuserrepository.Delete(user);
+                    var result=await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                        ++count;
                 }
             }
-            return await _iuserrepository.Save();
+            return count;
+        }
+
+        /// <summary>
+        /// 根据主键获取 user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<User> GetUser(string userId)
+        {
+            var user = await _iuserrepository.FirstOrDefault(m => m.Id.Equals(userId));
+            return user;
+        }
+
+        /// <summary>
+        /// 更新user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateUser(User user)
+        {
+            _iuserrepository.Update(user);
+            return (await _iuserrepository.Save() > 0) ? true : false;
         }
     }
 }

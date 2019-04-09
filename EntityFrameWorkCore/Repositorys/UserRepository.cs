@@ -30,11 +30,11 @@ namespace EntityFrameWorkCore.Repositorys
         {
             var query = _dbContext.Users.AsQueryable();
 
-            if (!string.IsNullOrEmpty(para.Name))
-                query.Where(m => m.UserName.Contains(para.Name));
+            if (!string.IsNullOrEmpty(para.Search_Name))
+                query.Where(m => m.UserName.Contains(para.Search_Name));
 
-            if (!string.IsNullOrEmpty(para.Description))
-                query.Where(m => m.Description.Contains(para.Description));
+            if (!string.IsNullOrEmpty(para.Search_Description))
+                query.Where(m => m.Description.Contains(para.Search_Description));
 
             var totalCount = query.Count();
 
